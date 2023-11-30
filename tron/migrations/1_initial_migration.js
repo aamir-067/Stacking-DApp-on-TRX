@@ -1,5 +1,8 @@
-var Migrations = artifacts.require("./FullDapp.sol");
+var Migrations = artifacts.require("MyContract");
 
-module.exports = function(deployer) {
-  deployer.deploy(Migrations);
+
+module.exports =async function (deployer) {
+  console.log('MyContract is ', Migrations);
+  const res = await deployer.deploy(Migrations);
+  console.log("response is : ",res);
 };

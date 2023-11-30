@@ -1,11 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-     mytoken: null,
-     presale: null,
-     stacking: null,
+     token: null,
+     contract: null,
      provider: null,
-     signer: null 
 }
 
 const web3Api = createSlice({
@@ -13,11 +11,11 @@ const web3Api = createSlice({
     initialState,
     reducers: {
         initWeb3: (state, action) => {
-            state.mytoken = action.payload.mytoken;
-            state.presale = action.payload.presale;
-            state.stacking = action.payload.stacking;
-            state.signer = action.payload.signer;
+            state.token = action.payload.token;
+            state.contract = action.payload.contract;
             state.provider = action.payload.provider;
+
+            console.log("state changed : ", {...state});
         }
     }
 })

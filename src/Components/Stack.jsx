@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useSelector } from 'react-redux';
-import { stackTokens, checkAccountDetails } from '../utils';
+import { stackTokens, unStackTokens } from '../utils';
 function Stack() {
     const tokensCount = useRef();
 
@@ -10,23 +10,21 @@ function Stack() {
     const handleStack = async (e) => {
         e?.preventDefault();
         const amount = Number(tokensCount.current.value);
-        const tokensAvail = Number(peerDetails.tokensInWallet.split(" ")[0]);
+        const isDeposit = document.querySelector("#deposit").checked;
+
         if (amount >= 50) {
-            if (tokensAvail >= amount) {
-                const res = await stackTokens({ amount });
-                
-                tokensCount.current.value = "";
-                if (res) {
-                    console.log("done stacking");
-                    await res.wait();
-                    await checkAccountDetails();
-                }
-            } else {
-                console.log("You have enough tokens in your wallet");
+            if (isDeposit) { // its deposit
+                console.log(isDeposit, amount);
+                await stackTokens({ amount });
+
+            } else {  // its withdrawal
+                console.log(isDeposit, amount);
+                await unStackTokens({ amount });
             }
         } else {
             console.log("invalid amount entered retry with correct number");
         }
+        tokensCount.current.value = "";
     }
 
     return (
@@ -47,12 +45,12 @@ function Stack() {
 
                     <div className='flex flex-col lg:flex-row justify-center gap-x-4 items-center mt-4'>
                         <div className='mx-4 gap-x-2 flex'>
-                            <label htmlFor="deposit" className='text-white'>Deposit</label>
-                            <input type="radio" id='deposit' name='operation-type' checked/>
+                            <label htmlFor="deposit" className='text-white depositRadio'>Deposit</label>
+                            <input type="radio" id='deposit' name='operation-type' checked />
                         </div>
                         <div className='mx-4 gap-x-2 flex'>
                             <label htmlFor="withdraw" className='text-white'>Withdraw</label>
-                            <input type="radio" id='withdraw' name='operation-type'/>
+                            <input type="radio" id='withdraw' name='operation-type' />
                         </div>
                     </div>
 
@@ -65,7 +63,7 @@ function Stack() {
                                 <div className="mt-2">
                                     <input
                                         ref={tokensCount}
-                                        className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                        className="flex h-10 w-full text-white rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                         type="number"
                                         placeholder="* minimum 50 tokens allowed"
                                     />

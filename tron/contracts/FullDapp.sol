@@ -1,6 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
-contract FullDapp {
+
+interface ITRC20 {
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address recipient, uint256 amount) external returns (bool);
+    function allowance(address owner, address spender) external view returns (uint256);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+}
+
+
+contract MyContract{
 
     enum TrxMethod {
         deposit,
@@ -21,8 +34,14 @@ contract FullDapp {
     event Withdraw(address _owner, uint _reward);
 
     address public owner;
-    constructor(address _owner) {
-        owner = _owner;
+    address tokenAddress;
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function setTokenAddress(address _token) public {
+        require(msg.sender == owner, "only owner can set token address");
+        tokenAddress = address(_token);
     }
 
     mapping(address => Record) _stakers;
@@ -67,18 +86,20 @@ contract FullDapp {
          // push the temprecord
         personDetails.fullDetails.push(tempRecord);
 
+        // send the trx to the client back  // this function is not deployed to chain
+        payable(msg.sender).transfer(_amount * 100000);
+
         // calculate the the reword tokens
         uint reward;
-        // todo : check for the tokens availibitlity in contract address
-        if(true){
+        reward = calculateReword(personDetails.avgTime ,_amount);
 
+
+        // check avail balance and send it if avail.
+        uint tokensAvail = ITRC20(tokenAddress).balanceOf(address(this));
+        if(tokensAvail >= reward){  // tokens avail, so send it
+            ITRC20(tokenAddress).transfer(msg.sender, reward * 1000);   // updated
         }
-
-
-
-
-
-
+        
         emit Withdraw(msg.sender, reward);
     }
 
