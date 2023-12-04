@@ -24,7 +24,6 @@ function Stack() {
         } else {
             console.log("invalid amount entered retry with correct number");
         }
-        tokensCount.current.value = "";
     }
 
     return (
@@ -46,7 +45,7 @@ function Stack() {
                     <div className='flex flex-col lg:flex-row justify-center gap-x-4 items-center mt-4'>
                         <div className='mx-4 gap-x-2 flex'>
                             <label htmlFor="deposit" className='text-white depositRadio'>Deposit</label>
-                            <input type="radio" id='deposit' name='operation-type' checked />
+                            <input type="radio" id='deposit' name='operation-type' checked onChange={()=>{}} />
                         </div>
                         <div className='mx-4 gap-x-2 flex'>
                             <label htmlFor="withdraw" className='text-white'>Withdraw</label>

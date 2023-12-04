@@ -1,28 +1,11 @@
 import {store} from "../app/store";
-// const retText = async()=>{
-//     const res = await contract.getString().call();
-//     console.log(res);
-//     setText(res);
-//   }
-  
-  
-//   const setTheText = async()=>{
-//     const text = document.querySelector("input").value;
-//     const res = await contract.setString(text).send({
-//       feeLimit:100000000,
-//       callValue:0,
-//       shouldPollResponse:true
-//   });
-//     console.log(res);
-//     retText();
-//   }
+import { setPeerDetails } from "../features";
 
 
 
 // const 
 export const stackTokens = async ({amount})=>{
   const web3Api = store.getState(state => state).web3Api;
-  console.log("stack function hitted successfully");
   if(web3Api.provider){
     try{
         const res = await web3Api.contract.stackTrx().send({
@@ -45,10 +28,10 @@ export const stackTokens = async ({amount})=>{
 
 export const unStackTokens = async ({amount})=>{
   const web3Api = store.getState(state => state).web3Api;
-  console.log("unstack function hitted successfully");
+  console.log("unstack function hit successfully");
   if(web3Api.provider){
     try{
-        const res = await web3Api.contract.unstackTrx(amount).send({
+        const res = await web3Api.contract.unstackTrx(amount * 1000000).send({   // since we have to send the amount in sun so i multiply 1000000
           feeLimit:100000000,
           callValue: 0,
           shouldPollResponse:true
@@ -68,16 +51,49 @@ export const unStackTokens = async ({amount})=>{
 
 export const getDetails = async ()=>{
   const web3Api = store.getState(state => state).web3Api;
-  console.log("getDetails function hit successfully");
   if(web3Api.provider){
     try{
-        const res = await web3Api.contract.getDetails().call();
 
-        console.log("getDetails response : ", res);
-        return {...res};
+        const res = await web3Api.contract.getDetails().call();
+        const reward = await web3Api.contract.calculateTotalReword().call();
+
+        const address = web3Api.provider.defaultAddress.base58;
+        const tokensInWallet = await web3Api.provider.trx.getBalance(address);  // token in wallet in from of sun.
+
+        store.dispatch(setPeerDetails({
+          total : web3Api.provider.toDecimal(res[0]) / 1000000,
+          inWallet : web3Api.provider.toDecimal(tokensInWallet) / 1000000,
+          history : res[2],
+          reward : web3Api.provider.toDecimal(reward),
+        }))
+        return true;
     }catch(e){
       console.log("error in sending transaction : ", e)
       return "error while sending transaction";
+    }
+  }else{
+    console.log("connect wallet first");
+    return "connect wallet first";
+  }
+}
+
+export const calculateReward = async ()=>{
+  const web3Api = store.getState(state => state.web3Api);
+  const record = store.getState(state => state.peerDetails);
+  if(web3Api.provider){
+    try{
+        const reward = await web3Api.contract.calculateTotalReword().call();
+
+        store.dispatch(setPeerDetails({
+          ...record,
+          reward : web3Api.provider.toDecimal(reward),
+        }))
+
+        return true;
+
+    }catch(e){
+      console.log("error in checking Reward : ", e)
+      return "error while checking Reward";
     }
   }else{
     console.log("connect wallet first");

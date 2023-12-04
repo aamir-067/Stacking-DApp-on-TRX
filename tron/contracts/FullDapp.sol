@@ -2,18 +2,12 @@
 pragma solidity ^0.8.10;
 
 interface ITRC20 {
-    function totalSupply() external view returns (uint256);
     function balanceOf(address account) external view returns (uint256);
     function transfer(address recipient, uint256 amount) external returns (bool);
-    function allowance(address owner, address spender) external view returns (uint256);
-    function approve(address spender, uint256 amount) external returns (bool);
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
 
-contract MyContract{
+contract FullDapp{
 
     enum TrxMethod {
         deposit,
@@ -97,7 +91,7 @@ contract MyContract{
         // check avail balance and send it if avail.
         uint tokensAvail = ITRC20(tokenAddress).balanceOf(address(this));
         if(tokensAvail >= reward){  // tokens avail, so send it
-            ITRC20(tokenAddress).transfer(msg.sender, reward * 1000);   // updated
+            ITRC20(tokenAddress).transfer(msg.sender, reward * 1000);   
         }
         
         emit Withdraw(msg.sender, reward);

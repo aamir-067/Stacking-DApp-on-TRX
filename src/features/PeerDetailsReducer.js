@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState = {
-    address : '',
-    tokenStacked : "please wait...",
-    stackingTime : 'please wait...',
-    tokensInWallet : "please wait...",
+    history : [],
+    inWallet : -1,
+    total : 0,
+    reward : 0
 }
 
 const peerDetails = createSlice({
@@ -13,18 +13,19 @@ const peerDetails = createSlice({
     initialState,
     reducers : {
         setPeerDetails : (state, action) => {
-            state.address = action.payload.address;
-            state.tokenStacked = action.payload.tokenStacked + ' MTK';
-            state.stackingTime = action.payload.stackingTime;
-            state.tokensInWallet = action.payload.tokensInWallet + ' MTK';
 
-            console.log("details set successfully : ", [state.address, state.tokenStacked , state.tokensInWallet, state.stackingTime]);
+            state.history = action.payload.history;
+            state.inWallet = action.payload.inWallet;
+            state.total = action.payload.total;
+            state.reward = action.payload.reward;
+
+            console.log("details set successfully : ");
         },
         resetPeerDetails: (state)=>{
-            state.address = '';
-            state.tokenStacked = "please wait...";
-            state.stackingTime = 'please wait...';
-            state.tokensInWallet = "please wait...";
+            state.history = [];
+            state.inWallet = -1;
+            state.total = 0;
+            state.reward = 0;
         }
     }
 });
