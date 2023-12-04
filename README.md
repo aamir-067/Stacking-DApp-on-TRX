@@ -1,5 +1,7 @@
 # Nile Test Network DApp README
 
+## `Note : this contracts are converted and now deployed on shasta testnet.`
+
 This decentralized application (DApp) is deployed on the Tron test network known as Nile. It leverages technologies such as React.js, Solidity, and Tailwind CSS for its development. Additionally, several libraries including tronWeb.js, TronBox, and TronLink wallet were utilized to facilitate interaction with the Tron network and smart contracts.
 
 
