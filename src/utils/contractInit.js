@@ -17,12 +17,11 @@ async function getTronWebb() {
       tronWeb = tronLink.tronWeb;
     } else {
       const res = await tronLink.request({ method: 'tron_requestAccounts' });
-
-      console.log("response address ; ",res.address);
       if (res.code === 200) {
         tronWeb = tronLink.tronWeb;
       }
     }
+    // const address = tronWeb.defaultAddress.base58;
     return tronWeb;
   }
 

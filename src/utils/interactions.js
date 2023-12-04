@@ -65,4 +65,23 @@ export const unStackTokens = async ({amount})=>{
     return "connect wallet first";
   }
 }
+
+export const getDetails = async ()=>{
+  const web3Api = store.getState(state => state).web3Api;
+  console.log("getDetails function hit successfully");
+  if(web3Api.provider){
+    try{
+        const res = await web3Api.contract.getDetails().call();
+
+        console.log("getDetails response : ", res);
+        return {...res};
+    }catch(e){
+      console.log("error in sending transaction : ", e)
+      return "error while sending transaction";
+    }
+  }else{
+    console.log("connect wallet first");
+    return "connect wallet first";
+  }
+}
   

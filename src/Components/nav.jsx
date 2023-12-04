@@ -5,7 +5,7 @@ import { initWeb3 } from "../features";
 import { useState } from "react";
 import {useSelector, useDispatch} from "react-redux";
 export default function NavBar() {
-	const address = useSelector(state => state.web3Api)?.provider?.address;
+	const address = useSelector(state => state.web3Api)?.provider?.defaultAddress.base58;
 
 	const handleLogIn = async () => {
 		if(store.getState(state=> state).web3Api.provider){
@@ -24,8 +24,6 @@ export default function NavBar() {
 		}
 	}
 
-	console.log(address)
-
 	return (
 		<>
 			<div className="w-full px-6 h-20 flex justify-between items-center border-black border-2 bg-black/50">
@@ -40,7 +38,7 @@ export default function NavBar() {
 					>
 						{address ?   "Log Out" : "connect wallet"}
 					</button>
-					{/* <p className="text-white text-lg">{address ? [...address].slice(0,5).join("") + "...." : "not connected"}</p> */}
+					<p className="text-white text-lg">{address ? [...address].slice(0,5).join("") + "...." + [...address].slice(29,34).join("") : "not connected"}</p>
 				</div>
 
 				<div className="flex justify-between w-3/12 mr-20 items-center">
