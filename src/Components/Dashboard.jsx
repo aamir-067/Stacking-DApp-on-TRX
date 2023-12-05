@@ -13,7 +13,7 @@ const Dashboard = () => {
 		const fetchDetails = async () => {
 			const res = await getDetails();
 		}
-		if (address && !personRecord?.avgTime) fetchDetails();   //  to get the details iff the wallet is connected.
+		if (address && personRecord?.inWallet == -1) fetchDetails();   //  to get the details iff the wallet is connected.
 	}, []);
 
 	return (
@@ -44,6 +44,7 @@ const Dashboard = () => {
 					Transactions History
 				</h1>
 				<div className="overflow-x-auto">
+				{personRecord.history.length > 0 ?
 					<table className="min-w-full divide-y-2 divide-gray-200 bg-transparent border-white border-collapse border-2 text-sm">
 						<thead className="bg-blue-600">
 							<tr>
@@ -61,32 +62,32 @@ const Dashboard = () => {
 								</th>
 							</tr>
 						</thead>
-
-						<tbody className="">
-							{
-								personRecord.history.map((item, index) => {
-									return <tr key={index} className="text-left border-2 border-white">
-												<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-medium text-gray-50">
-													{provider.toDecimal(item[0]) / 1000000} TRX
-												</td>
-												<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white text-gray-50">
-													{new Date(provider.toDecimal(item[2]) * 1000).toLocaleString()}
-												</td>
-												<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white text-gray-50">
-													{provider.toDecimal(item[1]) === 0 ? "Deposit" : "Withdrawal"}
-												</td>
-												<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white flex gap-x-5">
-												<p className="text-gray-50">76mh98fyi977</p>
-												<button className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 dark:bg-blue-600 dark:hover:bg-blue-700">
-													view
-												</button>
-											</td>
-									</tr>
-								})
-							}
-
-						</tbody>
-					</table>
+						<tbody className="w-full">
+									{
+										personRecord.history.map((item, index) => {
+											return <tr key={index} className="text-left border-2 border-white">
+														<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-medium text-gray-50">
+															{provider.toDecimal(item[0]) / 1000000} TRX
+														</td>
+														<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white text-gray-50">
+															{new Date(provider.toDecimal(item[2]) * 1000).toLocaleString()}
+														</td>
+														<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white text-gray-50">
+															{provider.toDecimal(item[1]) === 0 ? "Deposit" : "Withdrawal"}
+														</td>
+														<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white flex gap-x-5">
+														<p className="text-gray-50">76mh98fyi977</p>
+														<button className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 dark:bg-blue-600 dark:hover:bg-blue-700">
+															view
+														</button>
+													</td>
+											</tr>
+										})
+									}
+						</tbody>	
+					</table> :
+					(<h2 className="text-2xl text-center font-bold text-slate-100">No Records found</h2>)
+				}
 				</div>
 			</div>
 

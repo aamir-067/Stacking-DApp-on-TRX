@@ -2,25 +2,28 @@ import { NavLink } from "react-router-dom";
 import { getTronWeb } from "../utils/contractInit";
 import { store } from "../app/store";
 import { initWeb3, resetPeerDetails } from "../features";
-import {useSelector, useDispatch} from "react-redux";
+import {useSelector} from "react-redux";
+import { useState } from "react";
 export default function NavBar() {
 	const address = useSelector(state => state.web3Api)?.provider?.defaultAddress.base58;
-
+	const [connected, setConnected] = useState(false);
 	const handleLogIn = async () => {
-		if(store.getState(state=> state).web3Api.provider){
+		if(connected){
 			store.dispatch(initWeb3({
 				contract : undefined,
 				token : undefined,
 				provider : undefined
 			}));
 			store.dispatch(resetPeerDetails());
+			setConnected(false);
 		}else{
-			const {provider, contract, token} = await getTronWeb();
+			const response = await getTronWeb();
 			store.dispatch(initWeb3({
-                contract,
-                token,
-                provider
+                contract : response?.contract,
+                token : response?.token,
+                provider : response?.provider,
             }));
+			setConnected(true);
 		}
 	}
 

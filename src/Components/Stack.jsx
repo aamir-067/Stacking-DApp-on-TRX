@@ -1,15 +1,15 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { stackTokens, unStackTokens } from '../utils';
 function Stack() {
-    const tokensCount = useRef();
+    const [tokensCount, setTokenCount] = useState('0');
 
 
     const peerDetails = useSelector(state => state.peerDetails);
 
     const handleStack = async (e) => {
         e?.preventDefault();
-        const amount = Number(tokensCount.current.value);
+        const amount = Number(tokensCount);
         const isDeposit = document.querySelector("#deposit").checked;
 
         if (amount >= 50) {
@@ -24,6 +24,7 @@ function Stack() {
         } else {
             console.log("invalid amount entered retry with correct number");
         }
+        setTokenCount('0');
     }
 
     return (
@@ -61,7 +62,8 @@ function Stack() {
                                 </label>
                                 <div className="mt-2">
                                     <input
-                                        ref={tokensCount}
+                                        value={tokensCount}
+                                        onChange={(e)=> setTokenCount(e.target.value)}
                                         className="flex h-10 w-full text-white rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                         type="number"
                                         placeholder="* minimum 50 tokens allowed"
