@@ -1,2 +1,2 @@
-export const DAppAddress = "TUbAhuZzR4v3gpUNNfiL8kbBUdno15TfAC";
-export const TokenAddress = "TRwJWf4ax8TZz62aFYAF5to46szY7jUvex";
+export const DAppAddress = "TA7NzXqoxPCvpWQ3QRc1QoX89hAPjKr3NZ";
+export const TokenAddress = "TXCo1LVRf83NiWP5RtYQATtQQVub6yFivP";

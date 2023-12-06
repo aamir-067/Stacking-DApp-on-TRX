@@ -78,16 +78,19 @@ export const getDetails = async ()=>{
 }
 
 export const calculateReward = async ()=>{
-  const web3Api = store.getState(state => state.web3Api);
+  const web3Api = store.getState(state => state).web3Api;
   const record = store.getState(state => state.peerDetails);
   if(web3Api.provider){
     try{
-        const reward = await web3Api.contract.calculateTotalReword().call();
+        const res = await web3Api.contract.calculateTotalReword().call();
+        const reward  = web3Api.provider.toDecimal(res);
 
         store.dispatch(setPeerDetails({
           ...record,
-          reward : web3Api.provider.toDecimal(reward),
-        }))
+          reward,
+        }));
+
+        console.log("latest reward 2 : ", web3Api.provider.toDecimal(res));
 
         return true;
 
