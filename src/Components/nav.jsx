@@ -18,11 +18,6 @@ export default function NavBar() {
 			setConnected(false);
 		}else{
 			const response = await getTronWeb();
-			store.dispatch(initWeb3({
-                contract : response?.contract,
-                token : response?.token,
-                provider : response?.provider,
-            }));
 			setConnected(true);
 		}
 	}

@@ -31,8 +31,7 @@ export const unStackTokens = async ({amount})=>{
   console.log("unstack function hit successfully");
   if(web3Api.provider){
     try{
-        const res = await web3Api.contract.unstackTrx(amount * 1000000).send({   // since we have to send the amount in sun so i multiply 1000000
-          feeLimit:100000000,
+        const res = await web3Api.contract.unstackTrx(Number(amount) * 1000000).send({   // since we have to send the amount in sun so i multiply 1000000
           callValue: 0,
           shouldPollResponse:true
         });

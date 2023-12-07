@@ -4,27 +4,6 @@ import { store } from "../app/store";
 import { initWeb3 } from "../features";
 import { DAppAddress, TokenAddress } from "../CONSTANTS";
 
-async function getTronWebb() {
-	let tronWeb = null;
-	let tronLink = window.tronLink;
-
-
-	const res = await tronLink.request({ method: 'tron_requestAccounts' });
-	console.log("response address ; ", res);
-
-
-	if (window.tronLink.ready) {
-		tronWeb = tronLink.tronWeb;
-	} else {
-		const res = await tronLink.request({ method: 'tron_requestAccounts' });
-		if (res.code === 200) {
-			tronWeb = tronLink.tronWeb;
-		}
-	}
-	// const address = tronWeb.defaultAddress.base58;
-	return tronWeb;
-}
-
 async function getTronWeb() {
 	try {
 		let contract, token, tronWeb;
@@ -32,25 +11,40 @@ async function getTronWeb() {
 
 		if (!window.tronLink) {
             console.log("tronLink Wallet is not installed");
-			return;
+			return "tronLink Wallet is not installed";
         }
 		const res = await window.tronLink.request({ method: 'tron_requestAccounts', });
 
 
 		if (res.code === 200) {    // user accepts the connection
 			console.log(res.massage);
-			tronWeb = window?.tronLink?.tronWeb
+			tronWeb = window?.tronLink?.tronWeb;
 			contract = await tronWeb.contract(FullDApp.abi, DAppAddress);
 			token = await tronWeb.contract(Token.abi, TokenAddress);
-			return { token, contract, provider: tronWeb };
+			store.dispatch(initWeb3(
+                {
+					provider: tronWeb,
+                    contract: contract,
+                    token: token
+				}
+			));
+
+			return true;
 
 		} else if (!res.code)    // user accepts the connection
-			console.log("Wallet is Locked");
+			return "Wallet is Locked";
 		
-		else if (res.code === 4001)     // user rejects the connection
-			console.log(res.massage);
-		
-		return { token: undefined, contract: undefined, provider: undefined };
+		else if (res.code === 4001){     // user rejects the connection
+			store.dispatch(initWeb3(
+				{
+					provider: undefined,
+                    contract: undefined,
+                    token: undefined
+				}
+			))
+			return res.massage;
+
+			}
 
 
 
@@ -67,9 +61,9 @@ async function getTronWeb() {
 		//     }
 		// });
 
-
 	} catch (e) {
 		console.log(e);
+		return "unexpected error occurred";
 	}
 }
 
