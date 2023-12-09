@@ -81,7 +81,7 @@ contract FullDapp{
         personDetails.fullDetails.push(tempRecord);
 
         // send the trx to the client back  // this function is not deployed to chain
-        payable(msg.sender).transfer(_amount * 100000);
+        payable(msg.sender).transfer(_amount);
 
         // calculate the the reword tokens
         uint reward;
@@ -91,7 +91,7 @@ contract FullDapp{
         // check avail balance and send it if avail.
         uint tokensAvail = ITRC20(tokenAddress).balanceOf(address(this));
         if(tokensAvail >= reward){  // tokens avail, so send it
-            ITRC20(tokenAddress).transfer(msg.sender, reward * 1000);   
+            ITRC20(tokenAddress).transfer(msg.sender, reward * 10000);   
         }
         
         emit Withdraw(msg.sender, reward);

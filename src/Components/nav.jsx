@@ -7,6 +7,7 @@ import { useState } from "react";
 export default function NavBar() {
 	const address = useSelector(state => state.web3Api)?.provider?.defaultAddress.base58;
 	const [connected, setConnected] = useState(false);
+	const [toastText, setToastText] = useState("");
 	const handleLogIn = async () => {
 		if(connected){
 			store.dispatch(initWeb3({
@@ -45,6 +46,10 @@ export default function NavBar() {
                     <NavLink to={"dashboard"} className={({isActive})=> `${isActive ? "text-blue-700" : "text-white"} font-bold text-lg`}>Dashboard</NavLink>
 				</div>
 			</div>
+
+			{
+
+			}
 		</>
 	);
 }

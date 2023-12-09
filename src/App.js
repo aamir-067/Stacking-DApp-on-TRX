@@ -1,5 +1,6 @@
 import { NavBar, Footer } from "./Components";
 import { Outlet } from 'react-router-dom'
+import {ToastContainer} from "react-toastify";
 function App() {
 
 
@@ -12,6 +13,20 @@ function App() {
         </div>
         <Footer />
       </div>
+      
+      <ToastContainer
+        position="bottom-left"
+        autoClose={3000}
+        limit={2}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+    />
     </>
   );
 }

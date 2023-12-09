@@ -4,14 +4,15 @@ import { Hourglass } from "react-loader-spinner"
 import { getDetails, calculateReward } from "../utils/interactions";
 const Dashboard = () => {
 	const personRecord = useSelector(state => state.peerDetails);
-
+	const [loading , setLoading] = useState(false);
 
 	const provider = useSelector(state => state.web3Api)?.provider;
 	const address = provider?.defaultAddress.base58;
 	
 	const fetchDetails = async () => {
-		
+			setLoading(true);
 			const res = await getDetails();
+			setLoading(false);
 	}
 	useEffect(() => {
 		if (address && personRecord?.inWallet === -1) fetchDetails();   //  to get the details iff the wallet is connected.
@@ -20,7 +21,7 @@ const Dashboard = () => {
 
 	return (
 		<div className="w-full h-full flex justify-center items-center">
-			<div className={`w-8/12 mt-10 ${(personRecord.inWallet !== -1) ? "" : "hidden"}`}>
+			<div className={`w-8/12 mt-10 ${(personRecord.inWallet !== -1 && !loading) ? "" : "hidden"}`}>
 				<h1 className="text-center my-4 text-white font-bold text-3xl">
 					User Dashboard
 				</h1>
@@ -37,7 +38,7 @@ const Dashboard = () => {
 						<h2>Reward Tokens generated</h2>
 						<div className="flex gap-4">
 							<h2>{personRecord.reward} TKN</h2>
-							<button className="font-bold border-b-2" onClick={async()=>await getDetails()}>refresh</button>
+							<button className="font-bold border-b-2" onClick={async()=>await fetchDetails()}>refresh</button>
 						</div>
 					</div>
 				</div>
@@ -59,9 +60,9 @@ const Dashboard = () => {
 								<th className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-bold text-lg text-left text-gray-50">
 									Type
 								</th>
-								<th className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-bold text-lg text-left text-gray-50">
+								{/* <th className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-bold text-lg text-left text-gray-50">
 									Transaction ID
-								</th>
+								</th> */}
 							</tr>
 						</thead>
 						<tbody className="w-full">
@@ -77,12 +78,12 @@ const Dashboard = () => {
 														<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white text-gray-50">
 															{provider.toDecimal(item[1]) === 0 ? "Deposit" : "Withdrawal"}
 														</td>
-														<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white flex gap-x-5">
+														{/* <td className="whitespace-nowrap px-4 py-2 border-x-2 border-white flex gap-x-5">
 														<p className="text-gray-50">76mh98fyi977</p>
 														<button className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 dark:bg-blue-600 dark:hover:bg-blue-700">
 															view
 														</button>
-													</td>
+													</td> */}
 											</tr>
 										})
 									}
@@ -94,7 +95,7 @@ const Dashboard = () => {
 			</div>
 
 			{/* // loading  */}
-			<div className={`${(personRecord.inWallet !== -1) ? "hidden" : ""} flex items-center mt-40 justify-center w-full h-full`}>
+			<div className={`${(personRecord.inWallet !== -1 && !loading) ? "hidden" : ""} flex items-center mt-40 justify-center w-full h-full`}>
 				<div className="flex flex-col items-center space-x-1 text-sm text-gray-700">
 					<Hourglass
 						visible={true}
