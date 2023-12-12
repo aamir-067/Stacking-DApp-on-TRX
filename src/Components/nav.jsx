@@ -3,11 +3,13 @@ import { getTronWeb } from "../utils/contractInit";
 import { store } from "../app/store";
 import { initWeb3, resetPeerDetails } from "../features";
 import {useSelector} from "react-redux";
+import {toast} from "react-toastify";
 import { useState } from "react";
 export default function NavBar() {
 	const address = useSelector(state => state.web3Api)?.provider?.defaultAddress.base58;
 	const [connected, setConnected] = useState(false);
-	const [toastText, setToastText] = useState("");
+	const [toastMsg, setToastMsg] = useState(null);
+	
 	const handleLogIn = async () => {
 		if(connected){
 			store.dispatch(initWeb3({
@@ -15,11 +17,24 @@ export default function NavBar() {
 				token : undefined,
 				provider : undefined
 			}));
+			setToastMsg("Wallet disconnected");
+			setTimeout(()=>{
+				setToastMsg(null);
+			}, 3000);
 			store.dispatch(resetPeerDetails());
 			setConnected(false);
 		}else{
 			const response = await getTronWeb();
-			setConnected(true);
+			if(typeof response === "boolean"){
+				setConnected(true);
+				setToastMsg(true);
+			}else{
+				setConnected(false);
+				setToastMsg(response);
+				setTimeout(()=>{
+					setToastMsg(null);
+				}, 3000);
+			}
 		}
 	}
 
@@ -48,7 +63,32 @@ export default function NavBar() {
 			</div>
 
 			{
-
+				(()=>{
+					if(typeof toastMsg === "string" && toastMsg.length !== 0){
+						return toast.error(`${toastMsg}`, {
+							position: "bottom-left",
+							autoClose: 3000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: false,
+							draggable: true,
+							progress: undefined,
+							theme: "dark",
+							})
+					}else if(typeof toastMsg === "boolean"){
+						return toast.success('wallet connected successfully', {
+							position: "bottom-left",
+							autoClose: 3000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							progress: undefined,
+							theme: "dark",
+							})
+					}
+				})()
+					
 			}
 		</>
 	);

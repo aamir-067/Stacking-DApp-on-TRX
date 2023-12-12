@@ -83,6 +83,11 @@ contract FullDapp{
         // send the trx to the client back  // this function is not deployed to chain
         payable(msg.sender).transfer(_amount);
 
+        // reset the avtTime to 0 if the trx in the liquidity pool is zero
+        if(personDetails.total == 0){
+            personDetails.avgTime  = 0;
+        }
+
         // calculate the the reword tokens
         uint reward;
         reward = calculateReword(personDetails.avgTime ,_amount);

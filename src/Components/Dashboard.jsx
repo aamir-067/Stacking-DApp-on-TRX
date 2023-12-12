@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Hourglass } from "react-loader-spinner"
-import { getDetails, calculateReward } from "../utils/interactions";
+import { getDetails } from "../utils/interactions";
+
 const Dashboard = () => {
 	const personRecord = useSelector(state => state.peerDetails);
 	const [loading , setLoading] = useState(false);
@@ -15,7 +16,7 @@ const Dashboard = () => {
 			setLoading(false);
 	}
 	useEffect(() => {
-		if (address && personRecord?.inWallet === -1) fetchDetails();   //  to get the details iff the wallet is connected.
+		 fetchDetails();   //  to get the details iff the wallet is connected.
 		
 	}, []);
 
@@ -70,13 +71,13 @@ const Dashboard = () => {
 										personRecord.history.map((item, index) => {
 											return <tr key={index} className="text-left border-2 border-white">
 														<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-medium text-gray-50">
-															{provider.toDecimal(item[0]) / 1000000} TRX
+															{provider?.toDecimal(item[0]) / 1000000} TRX
 														</td>
 														<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white text-gray-50">
-															{new Date(provider.toDecimal(item[2]) * 1000).toLocaleString()}
+															{new Date(provider?.toDecimal(item[2]) * 1000).toLocaleString()}
 														</td>
 														<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white text-gray-50">
-															{provider.toDecimal(item[1]) === 0 ? "Deposit" : "Withdrawal"}
+															{provider?.toDecimal(item[1]) === 0 ? "Deposit" : "Withdrawal"}
 														</td>
 														{/* <td className="whitespace-nowrap px-4 py-2 border-x-2 border-white flex gap-x-5">
 														<p className="text-gray-50">76mh98fyi977</p>
