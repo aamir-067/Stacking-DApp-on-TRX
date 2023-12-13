@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {toast} from "react-toastify";
-import { stackTokens, unStackTokens } from '../utils';
+import { autoConnect, stackTokens, unStackTokens } from '../utils';
 function Stack() {
     const [tokensCount, setTokenCount] = useState('0');
     const [isDeposit, setIsDeposit] = useState(null);
@@ -25,6 +25,13 @@ function Stack() {
         }
         setTokenCount('0');
     }
+
+
+    useEffect(()=>{
+		// for automatically connecting a wallet if its not locked
+		autoConnect();
+	},[]);
+
     return (
         <section className=''>
             <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">

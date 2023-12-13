@@ -2,7 +2,15 @@ import { NavBar, Footer } from "./Components";
 import { Outlet } from 'react-router-dom'
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { autoConnect } from "./utils";
+import { useEffect } from "react";
 function App() {
+
+  
+  useEffect(()=>{
+		// for automatically connecting a wallet if its not locked
+		autoConnect();
+	},[]);
 
 
   return (

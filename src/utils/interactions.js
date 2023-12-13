@@ -13,7 +13,7 @@ export const stackTokens = async ({ amount }) => {
   const web3Api = store.getState(state => state).web3Api;
   if (web3Api.provider) {
     try {
-      const res = await web3Api.contract.stackTrx().send({
+      await web3Api.contract.stackTrx().send({
         feeLimit: 100000000,
         callValue: amount * 1000000,
         shouldPollResponse: false
@@ -40,7 +40,7 @@ export const unStackTokens = async ({ amount }) => {
   // console.log("unstack function hit successfully");
   if (web3Api.provider) {
     try {
-      const res = await web3Api.contract.unstackTrx(Number(amount) * 1000000).send({   // since we have to send the amount in sun so i multiply 1000000
+       await web3Api.contract.unstackTrx(Number(amount) * 1000000).send({   // since we have to send the amount in sun so i multiply 1000000
         callValue: 0,
         shouldPollResponse: false
       });

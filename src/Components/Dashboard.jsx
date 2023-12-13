@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Hourglass } from "react-loader-spinner"
 import {toast} from "react-toastify";
 import { getDetails } from "../utils/interactions";
+import { autoConnect } from "../utils";
 
 const Dashboard = () => {
 	const personRecord = useSelector(state => state.peerDetails);
@@ -22,8 +23,11 @@ const Dashboard = () => {
 	}
 
 	useEffect(()=>{
-		fetchDetails();
+		// for automatically connecting a wallet if its not locked
+		autoConnect();
 	},[]);
+
+
 
 	return (
 		<div className="w-full h-full flex justify-center items-center">
@@ -66,9 +70,6 @@ const Dashboard = () => {
 									<th className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-bold text-lg text-left text-gray-50">
 										Type
 									</th>
-									{/* <th className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-bold text-lg text-left text-gray-50">
-									Transaction ID
-								</th> */}
 								</tr>
 							</thead>
 							<tbody className="w-full">

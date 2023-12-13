@@ -4,8 +4,10 @@ import { store } from "../app/store";
 import { initWeb3, resetPeerDetails } from "../features";
 import {useSelector} from "react-redux";
 import {toast} from "react-toastify";
-import { useState } from "react";
-import { getDetails } from "../utils/interactions";
+import { useState, useEffect } from "react";
+import { autoConnect, getDetails } from "../utils";
+
+
 export default function NavBar() {
 	const address = useSelector(state => state.web3Api)?.provider?.defaultAddress.base58;
 	const [connected, setConnected] = useState(false);
@@ -33,6 +35,11 @@ export default function NavBar() {
 			}
 		}
 	}
+
+	useEffect(()=>{
+		// for automatically connecting a wallet if its not locked
+		autoConnect();
+	},[]);
 
 	return (
 		<>

@@ -1,4 +1,4 @@
 import { getTronWeb } from "./contractInit";
-import { stackTokens, unStackTokens } from "./interactions";
-
-export {stackTokens, getTronWeb, unStackTokens};
+import { getDetails, stackTokens, unStackTokens } from "./interactions";
+import {autoConnect} from "./autoConnect";
+export {stackTokens, getTronWeb, unStackTokens,getDetails, autoConnect};
