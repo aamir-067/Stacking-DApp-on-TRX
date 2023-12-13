@@ -19,7 +19,6 @@ const peerDetails = createSlice({
             state.total = action.payload.total;
             state.reward = action.payload.reward;
 
-            console.log("details set successfully : ");
         },
         resetPeerDetails: (state)=>{
             state.history = [];

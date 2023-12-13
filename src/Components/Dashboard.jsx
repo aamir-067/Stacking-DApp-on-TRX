@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Hourglass } from "react-loader-spinner"
+import {toast} from "react-toastify";
 import { getDetails } from "../utils/interactions";
 
 const Dashboard = () => {
 	const personRecord = useSelector(state => state.peerDetails);
-	const [loading , setLoading] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [toastMsg, setToastMsg] = useState("");
 
 	const provider = useSelector(state => state.web3Api)?.provider;
 	const address = provider?.defaultAddress.base58;
-	
+
 	const fetchDetails = async () => {
-			setLoading(true);
-			const res = await getDetails();
-			setLoading(false);
+		setLoading(true);
+		const res = await getDetails();
+		setLoading(false);
+		if (typeof res === "string") {
+			setToastMsg(res);
+		}
 	}
-	useEffect(() => {
-		 fetchDetails();   //  to get the details iff the wallet is connected.
-		
-	}, []);
+
+	useEffect(()=>{
+		fetchDetails();
+	},[]);
 
 	return (
 		<div className="w-full h-full flex justify-center items-center">
@@ -39,59 +44,56 @@ const Dashboard = () => {
 						<h2>Reward Tokens generated</h2>
 						<div className="flex gap-4">
 							<h2>{personRecord.reward} TKN</h2>
-							<button className="font-bold border-b-2" onClick={async()=>await fetchDetails()}>refresh</button>
+							<button className="font-bold border-b-2" onClick={async () => await fetchDetails()}>refresh</button>
 						</div>
 					</div>
 				</div>
 
 				<h1 className="text-center my-4 text-white font-bold text-3xl">
-					Transactions History
+					Recent Transactions
 				</h1>
 				<div className="overflow-x-auto">
-				{personRecord.history.length > 0 ?
-					<table className="min-w-full divide-y-2 divide-gray-200 bg-transparent border-white border-collapse border-2 text-sm">
-						<thead className="bg-blue-600">
-							<tr>
-								<th className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-bold text-lg text-left text-gray-50">
-									Amount
-								</th>
-								<th className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-bold text-lg text-left text-gray-50">
-									Time
-								</th>
-								<th className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-bold text-lg text-left text-gray-50">
-									Type
-								</th>
-								{/* <th className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-bold text-lg text-left text-gray-50">
+					{personRecord.history.length > 0 ?
+						<table className="min-w-full divide-y-2 divide-gray-200 bg-transparent border-white border-collapse border-2 text-sm">
+							<thead className="bg-blue-600">
+								<tr>
+									<th className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-bold text-lg text-left text-gray-50">
+										Amount
+									</th>
+									<th className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-bold text-lg text-left text-gray-50">
+										Time
+									</th>
+									<th className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-bold text-lg text-left text-gray-50">
+										Type
+									</th>
+									{/* <th className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-bold text-lg text-left text-gray-50">
 									Transaction ID
 								</th> */}
-							</tr>
-						</thead>
-						<tbody className="w-full">
-									{
-										personRecord.history.map((item, index) => {
+								</tr>
+							</thead>
+							<tbody className="w-full">
+								{
+									personRecord.history.slice().reverse().map((item, index) => {
+										if (index < 8) {
 											return <tr key={index} className="text-left border-2 border-white">
-														<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-medium text-gray-50">
-															{provider?.toDecimal(item[0]) / 1000000} TRX
-														</td>
-														<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white text-gray-50">
-															{new Date(provider?.toDecimal(item[2]) * 1000).toLocaleString()}
-														</td>
-														<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white text-gray-50">
-															{provider?.toDecimal(item[1]) === 0 ? "Deposit" : "Withdrawal"}
-														</td>
-														{/* <td className="whitespace-nowrap px-4 py-2 border-x-2 border-white flex gap-x-5">
-														<p className="text-gray-50">76mh98fyi977</p>
-														<button className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 dark:bg-blue-600 dark:hover:bg-blue-700">
-															view
-														</button>
-													</td> */}
+												<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white font-medium text-gray-50">
+													{provider?.toDecimal(item[0]) / 1000000} TRX
+												</td>
+												<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white text-gray-50">
+													{new Date(provider?.toDecimal(item[2]) * 1000).toLocaleString()}
+												</td>
+												<td className="whitespace-nowrap px-4 py-2 border-x-2 border-white text-gray-50">
+													{provider?.toDecimal(item[1]) === 0 ? "Deposit" : "Withdrawal"}
+												</td>
 											</tr>
-										})
-									}
-						</tbody>	
-					</table> :
-					(<h2 className="text-2xl text-center font-bold text-slate-100">No Records found</h2>)
-				}
+										}
+
+									})
+								}
+							</tbody>
+						</table> :
+						(<h2 className="text-2xl text-center font-bold text-slate-100">No Records found</h2>)
+					}
 				</div>
 			</div>
 
@@ -111,6 +113,25 @@ const Dashboard = () => {
 					<h2 className="text-slate-200 text-lg">kindly connect you wallet if not connected by clicking the above button</h2>
 				</div>
 			</div>
+
+			{/* toast massage */}
+			{
+				(() => {
+					if (toastMsg.length !== 0) {
+						toast.error(`${toastMsg}`, {
+							position: "bottom-left",
+							autoClose: 3000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							progress: undefined,
+							theme: "dark",
+						})
+						setToastMsg("");
+					}
+				})()
+			}
 		</div>
 	);
 };

@@ -5,6 +5,7 @@ import { initWeb3, resetPeerDetails } from "../features";
 import {useSelector} from "react-redux";
 import {toast} from "react-toastify";
 import { useState } from "react";
+import { getDetails } from "../utils/interactions";
 export default function NavBar() {
 	const address = useSelector(state => state.web3Api)?.provider?.defaultAddress.base58;
 	const [connected, setConnected] = useState(false);
@@ -25,6 +26,7 @@ export default function NavBar() {
 			if(typeof response === "boolean"){
 				setConnected(true);
 				setToastMsg(true);
+				await getDetails();
 			}else{
 				setConnected(false);
 				setToastMsg(response);

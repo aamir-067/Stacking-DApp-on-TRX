@@ -18,14 +18,13 @@ export const stackTokens = async ({ amount }) => {
         callValue: amount * 1000000,
         shouldPollResponse: false
       });
-      console.log("deposit response : ", res);
       return amount;
     } catch (e) {
-      console.log("error in sending transaction : ", e)
+      // console.log("error in sending transaction : ", e)
       return "error while sending transaction";
     }
   } else {
-    console.log("connect wallet first");
+    // console.log("connect wallet first");
     return "connect wallet first";
   }
 }
@@ -38,7 +37,7 @@ export const stackTokens = async ({ amount }) => {
  */
 export const unStackTokens = async ({ amount }) => {
   const web3Api = store.getState(state => state).web3Api;
-  console.log("unstack function hit successfully");
+  // console.log("unstack function hit successfully");
   if (web3Api.provider) {
     try {
       const res = await web3Api.contract.unstackTrx(Number(amount) * 1000000).send({   // since we have to send the amount in sun so i multiply 1000000
@@ -46,15 +45,15 @@ export const unStackTokens = async ({ amount }) => {
         shouldPollResponse: false
       });
 
-      console.log("Unstack response : ", res);
+      // console.log("Unstack response : ", res);
       return amount;
 
     } catch (e) {
-      console.log("error in sending transaction : ", e)
+      // console.log("error in sending transaction : ", e)
       return "error while sending transaction";
     }
   } else {
-    console.log("connect wallet first");
+    // console.log("connect wallet first");
     return "connect wallet first";
   }
 }
@@ -85,40 +84,40 @@ export const getDetails = async () => {
       }))
       return true;
     } catch (e) {
-      console.log("error in sending transaction : ", e)
-      return "error while sending transaction";
+      // console.log("error in sending transaction : ", e)
+      return "error while fetching details : ";
     }
   } else {
-    console.log("connect wallet first");
-    return "connect wallet first";
+    // console.log("connect wallet first");
+    return "connect wallet to fetching details";
   }
 }
 
 
-export const calculateReward = async () => {
-  const web3Api = store.getState(state => state).web3Api;
-  const record = store.getState(state => state.peerDetails);
-  if (web3Api.provider) {
-    try {
-      const res = await web3Api.contract.calculateTotalReword().call();
-      const reward = web3Api.provider.toDecimal(res);
+// export const calculateReward = async () => {
+//   const web3Api = store.getState(state => state).web3Api;
+//   const record = store.getState(state => state.peerDetails);
+//   if (web3Api.provider) {
+//     try {
+//       const res = await web3Api.contract.calculateTotalReword().call();
+//       const reward = web3Api.provider.toDecimal(res);
 
-      store.dispatch(setPeerDetails({
-        ...record,
-        reward,
-      }));
+//       store.dispatch(setPeerDetails({
+//         ...record,
+//         reward,
+//       }));
 
-      console.log("latest reward 2 : ", web3Api.provider.toDecimal(res));
+//       console.log("latest reward 2 : ", web3Api.provider.toDecimal(res));
 
-      return true;
+//       return true;
 
-    } catch (e) {
-      console.log("error in checking Reward : ", e)
-      return "error while checking Reward";
-    }
-  } else {
-    console.log("connect wallet first");
-    return "connect wallet first";
-  }
-}
+//     } catch (e) {
+//       console.log("error in checking Reward : ", e)
+//       return "error while checking Reward";
+//     }
+//   } else {
+//     console.log("connect wallet first");
+//     return "connect wallet first";
+//   }
+// }
 
