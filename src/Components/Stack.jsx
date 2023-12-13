@@ -1,32 +1,30 @@
-import React, { useRef, useState } from 'react'
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react'
+import {toast} from "react-toastify";
 import { stackTokens, unStackTokens } from '../utils';
 function Stack() {
     const [tokensCount, setTokenCount] = useState('0');
+    const [isDeposit, setIsDeposit] = useState(null);
+    const [toastMsg, setToastMsg] = useState("");
 
-
-    const peerDetails = useSelector(state => state.peerDetails);
 
     const handleStack = async (e) => {
         e?.preventDefault();
         const amount = Number(tokensCount);
-        const isDeposit = document.querySelector("#deposit").checked;
 
         if (amount >= 50) {
-            if (isDeposit) { // its deposit
-                console.log(isDeposit, amount);
-                await stackTokens({ amount });
+            if (isDeposit === true) { // its deposit
+                const res = await stackTokens({ amount });
+                setToastMsg(res);
 
-            } else {  // its withdrawal
-                console.log(isDeposit, amount);
-                await unStackTokens({ amount });
+            } else if(isDeposit=== false) {  // its withdrawal
+                const res = await unStackTokens({ amount });
+                setToastMsg(res);
             }
         } else {
-            console.log("invalid amount entered retry with correct number");
+            setToastMsg("Enter amount greater than 50");
         }
         setTokenCount('0');
     }
-
     return (
         <section className=''>
             <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
@@ -46,11 +44,11 @@ function Stack() {
                     <div className='flex flex-col lg:flex-row justify-center gap-x-4 items-center mt-4'>
                         <div className='mx-4 gap-x-2 flex'>
                             <label htmlFor="deposit" className='text-white depositRadio'>Deposit</label>
-                            <input type="radio" id='deposit' name='operation-type' checked onChange={()=>{}} />
+                            <input type="radio" id='deposit' name='operation-type' onClick={()=>{setIsDeposit(true)}} />
                         </div>
                         <div className='mx-4 gap-x-2 flex'>
                             <label htmlFor="withdraw" className='text-white'>Withdraw</label>
-                            <input type="radio" id='withdraw' name='operation-type' />
+                            <input type="radio" id='withdraw' name='operation-type' onClick={()=>{setIsDeposit(false)}} />
                         </div>
                     </div>
 
@@ -75,15 +73,48 @@ function Stack() {
                                 <button
                                     onClick={async () => { await handleStack(undefined) }}
                                     type="button"
-                                    className="inline-flex w-full items-center justify-center rounded-md bg-blue-700 px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-blue-800"
+                                    disabled = {isDeposit === null ? true : false}
+                                    className={`inline-flex w-full items-center justify-center ${isDeposit === null ? "bg-blue-900" : "hover:bg-blue-800"} rounded-md bg-blue-700 px-3.5 py-2.5 font-semibold leading-7 text-white `}
                                 >
-                                    Stack Tokens
+                                    {isDeposit ? "Stack Tokens" : isDeposit === false ? "Unstack Tokens" : "select option"}
                                 </button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
+
+            {/* toast code */}
+            {   
+
+            (()=>{
+                if(typeof toastMsg === "number"){
+                    toast.success(`transaction successful`, {
+                        position: "bottom-left",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        })
+                    setToastMsg("");
+                }else  if(toastMsg.length){
+                    toast.error(`${toastMsg}`, {
+                        position: "bottom-left",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        })
+                    setToastMsg("");
+                }
+            })()
+            }
         </section>
     )
 }

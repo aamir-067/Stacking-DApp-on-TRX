@@ -1,17 +1,12 @@
 import { NavBar, Footer } from "./Components";
 import { Outlet } from 'react-router-dom'
-import { useSelector } from "react-redux";
-import {ToastContainer, toast} from "react-toastify";
+import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 function App() {
-  const { toastStatus } = useSelector(state => state);
-
-  console.log(toastStatus);
 
 
   return (
     <>
-
       <div className="app">
         <div className="mb-40 min-h-screen">
           <NavBar />
@@ -22,7 +17,7 @@ function App() {
       <ToastContainer
         position="bottom-left"
         autoClose={5000}
-        limit={2}
+        limit={3}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

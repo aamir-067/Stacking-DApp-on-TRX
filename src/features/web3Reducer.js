@@ -14,8 +14,6 @@ const web3Api = createSlice({
             state.token = action.payload.token;
             state.contract = action.payload.contract;
             state.provider = action.payload.provider;
-
-            console.log("state changed : ", {...state});
         }
     }
 })

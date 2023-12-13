@@ -17,7 +17,6 @@ async function getTronWeb() {
 
 
 		if (res.code === 200) {    // user accepts the connection
-			console.log(res.massage);
 			tronWeb = window?.tronLink?.tronWeb;
 			contract = await tronWeb.contract(FullDApp.abi, DAppAddress);
 			token = await tronWeb.contract(Token.abi, TokenAddress);

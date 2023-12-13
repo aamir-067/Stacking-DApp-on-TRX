@@ -18,9 +18,6 @@ export default function NavBar() {
 				provider : undefined
 			}));
 			setToastMsg("Wallet disconnected");
-			setTimeout(()=>{
-				setToastMsg(null);
-			}, 3000);
 			store.dispatch(resetPeerDetails());
 			setConnected(false);
 		}else{
@@ -31,9 +28,6 @@ export default function NavBar() {
 			}else{
 				setConnected(false);
 				setToastMsg(response);
-				setTimeout(()=>{
-					setToastMsg(null);
-				}, 3000);
 			}
 		}
 	}
@@ -64,8 +58,8 @@ export default function NavBar() {
 
 			{
 				(()=>{
-					if(typeof toastMsg === "string" && toastMsg.length !== 0){
-						return toast.error(`${toastMsg}`, {
+					if(typeof toastMsg === "string"){
+						toast.error(`${toastMsg}`, {
 							position: "bottom-left",
 							autoClose: 3000,
 							hideProgressBar: false,
@@ -75,8 +69,9 @@ export default function NavBar() {
 							progress: undefined,
 							theme: "dark",
 							})
-					}else if(typeof toastMsg === "boolean"){
-						return toast.success('wallet connected successfully', {
+							setToastMsg(null);
+					}else if(toastMsg === true){
+						toast.success('wallet connected successfully', {
 							position: "bottom-left",
 							autoClose: 3000,
 							hideProgressBar: false,
@@ -86,6 +81,7 @@ export default function NavBar() {
 							progress: undefined,
 							theme: "dark",
 							})
+							setToastMsg(null);
 					}
 				})()
 					
