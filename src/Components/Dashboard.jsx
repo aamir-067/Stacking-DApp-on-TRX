@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Hourglass } from "react-loader-spinner"
 import {toast} from "react-toastify";
-import { getDetails } from "../utils/interactions";
-import { autoConnect } from "../utils";
+import { autoConnect, getDetails } from "../utils";
 
 const Dashboard = () => {
 	const personRecord = useSelector(state => state.peerDetails);
@@ -11,7 +10,6 @@ const Dashboard = () => {
 	const [toastMsg, setToastMsg] = useState("");
 
 	const provider = useSelector(state => state.web3Api)?.provider;
-	const address = provider?.defaultAddress.base58;
 
 	const fetchDetails = async () => {
 		setLoading(true);
@@ -25,6 +23,7 @@ const Dashboard = () => {
 	useEffect(()=>{
 		// for automatically connecting a wallet if its not locked
 		autoConnect();
+		fetchDetails();
 	},[]);
 
 
@@ -87,6 +86,8 @@ const Dashboard = () => {
 													{provider?.toDecimal(item[1]) === 0 ? "Deposit" : "Withdrawal"}
 												</td>
 											</tr>
+										}else{
+											return ""
 										}
 
 									})

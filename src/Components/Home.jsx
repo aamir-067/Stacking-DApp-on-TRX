@@ -1,12 +1,11 @@
 import { NavLink } from 'react-router-dom'
-import {useSelector} from "react-redux";
 
 const Home = () => {
 
 
   return (
     <div className="w-full flex justify-center">
-        <div className="flex flex-col my-20 justify-center w-7/12">
+        <div className="flex flex-col my-40 justify-center w-7/12">
           <h1 className="mt-8 font-bold text-center text-slate-300 tracking-tight text-7xl">
             We care about your future
           </h1>

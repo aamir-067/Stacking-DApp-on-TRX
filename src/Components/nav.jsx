@@ -6,15 +6,15 @@ import {useSelector} from "react-redux";
 import {toast} from "react-toastify";
 import { useState, useEffect } from "react";
 import { autoConnect, getDetails } from "../utils";
+import Cookies from "js-cookie";
 
 
 export default function NavBar() {
 	const address = useSelector(state => state.web3Api)?.provider?.defaultAddress.base58;
-	const [connected, setConnected] = useState(false);
 	const [toastMsg, setToastMsg] = useState(null);
-	
+
 	const handleLogIn = async () => {
-		if(connected){
+		if(address){
 			store.dispatch(initWeb3({
 				contract : undefined,
 				token : undefined,
@@ -22,15 +22,14 @@ export default function NavBar() {
 			}));
 			setToastMsg("Wallet disconnected");
 			store.dispatch(resetPeerDetails());
-			setConnected(false);
+			Cookies.set("connected", "false");
 		}else{
 			const response = await getTronWeb();
+			Cookies.set("connected" , "true", {expires : 1/12});
 			if(typeof response === "boolean"){
-				setConnected(true);
 				setToastMsg(true);
 				await getDetails();
 			}else{
-				setConnected(false);
 				setToastMsg(response);
 			}
 		}

@@ -3,7 +3,6 @@ import FullDApp from "../artifacts/FullDapp.json";
 import { store } from "../app/store";
 import { initWeb3 } from "../features";
 import { DAppAddress, TokenAddress } from "../CONSTANTS";
-import Cookie from "js-cookie";
 
 
 async function getTronWeb() {
@@ -29,8 +28,6 @@ async function getTronWeb() {
                     token: token
 				}
 			));
-
-			Cookie.set("connected", "true", {expires : 1/12});
 
 			return true;
 
