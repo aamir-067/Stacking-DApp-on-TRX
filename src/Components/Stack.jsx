@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {toast} from "react-toastify";
 import { autoConnect, stackTokens, unStackTokens } from '../utils';
 function Stack() {
-    const [tokensCount, setTokenCount] = useState('0');
+    const tokensCount = useRef(null);
     const [isDeposit, setIsDeposit] = useState(null);
     const [toastMsg, setToastMsg] = useState("");
 
 
     const handleStack = async (e) => {
         e?.preventDefault();
-        const amount = Number(tokensCount);
+        const amount = Number(tokensCount.current?.value);
 
         if (amount >= 50) {
             if (isDeposit === true) { // its deposit
@@ -23,7 +23,7 @@ function Stack() {
         } else {
             setToastMsg("Enter amount greater than 50");
         }
-        setTokenCount('0');
+        tokensCount.current.value = "0";
     }
 
 
@@ -35,9 +35,9 @@ function Stack() {
     return (
         <section className=''>
             <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
-                <div className="w-4/12 bg-black/60 rounded-lg p-6 py-16">
+                <div className=" min-w-[300px] w-8/12 md:w-6/12 lg:w-4/12 bg-black/60 rounded-lg p-6 py-16">
                     <div className="mb-2 flex justify-center">
-                        <span className='w-20'>
+                        <span className='w-14 md:w-20'>
                             <img src="https://img.freepik.com/free-vector/flat-design-crypto-mining-logo-template_23-2149409054.jpg?t=st=1698559799~exp=1698560399~hmac=02efc8967937811259bbfea12251e2ebe0e0d7762de1bfd029b10bf6577ef238" alt="this application logo" />
                         </span>
                     </div>
@@ -67,8 +67,7 @@ function Stack() {
                                 </label>
                                 <div className="mt-2">
                                     <input
-                                        value={tokensCount}
-                                        onChange={(e)=> setTokenCount(e.target.value)}
+                                        ref={tokensCount}
                                         className="flex h-10 w-full text-white rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                         type="number"
                                         placeholder="* minimum 50 tokens allowed"

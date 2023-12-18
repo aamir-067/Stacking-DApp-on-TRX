@@ -1,21 +1,32 @@
 import { NavLink } from 'react-router-dom'
-
+import Shery from 'sheryjs';
 const Home = () => {
 
+  Shery.mouseFollower();
+  Shery.textAnimate(".animate" /* Element to target.*/, {
+    //Parameters are optional.
+    style: 1,
+    y: 10,
+    delay: 0.1,
+    duration: 2,
+    ease: "cubic-bezier(0.23, 1, 0.320, 1)",
+    multiplier: 0.1,
+  });
+  Shery.makeMagnet(".magnet")
 
   return (
     <div className="w-full flex justify-center">
-        <div className="flex flex-col my-40 justify-center w-7/12">
-          <h1 className="mt-8 font-bold text-center text-slate-300 tracking-tight text-7xl">
+        <div className="flex flex-col md:mt-40 mt-10 justify-center w-11/12 md:w-9/12">
+          <h1 className="mt-8 animate font-bold text-center text-slate-300 tracking-tight text-3xl md:text-5xl lg:text-7xl">
             We care about your future
           </h1>
-          <p className="mt-8 text-lg text-slate-400 text-center p-6">
+          <p className="lg:mt-8 mt-4 text-md lg:text-lg text-slate-400 text-center p-6">
           Adding TRX tokens to the liquidity pool earns one extra token per TRX stacked, based on 5 minutes of total pooled TRX, encouraging participation and rewarding liquidity provision
           </p>
           <div className='my-6 flex justify-center'>
               <NavLink
                 to={"/operations"}
-                className="rounded-md bg-blue-700 px-3 py-2.5 text-sm font-semibold text-white hover:bg-blue-800 ease-in-out duration-75" 
+                className="rounded-md magnet px-3 py-2.5 text-lg font-semibold text-white ease-in-out duration-75" 
               >
                 Stack TRX now
               </NavLink>

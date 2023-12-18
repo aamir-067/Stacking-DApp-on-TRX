@@ -14,15 +14,14 @@ function App() {
 
 
   return (
-    <>
-      <div className="app">
-        <div className="mb-40 min-h-screen">
+      <div className="overflow-hidden">
+        <div className="app lg:min-h-screen">
           <NavBar />
           <Outlet />
         </div>
+        {/* // ? footer */}
         <Footer />
-      </div>
-      <ToastContainer
+        <ToastContainer
         position="bottom-left"
         autoClose={5000}
         limit={3}
@@ -35,7 +34,8 @@ function App() {
         pauseOnHover
         theme="dark"
       />
-    </>
+      </div>
+
   );
 }
 

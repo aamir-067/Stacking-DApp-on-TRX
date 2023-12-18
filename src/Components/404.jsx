@@ -5,8 +5,8 @@ import {useNavigate} from "react-router-dom";
 
   const navigate = useNavigate();
   return (
-    <div className="py-40 h-screen">
-      <div className="text-center">
+    <div className=" mt-20 md:mt-40 flex justify-center h-screen">
+      <div className="text-center w-11/12">
         <p className="text-base font-semibold text-black">404</p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-white lg:text-8xl">
           Page not found
