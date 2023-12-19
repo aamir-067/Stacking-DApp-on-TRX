@@ -7,8 +7,11 @@ This decentralized application (DApp) is deployed on the Tron test network known
 ## Technologies Used
 
 - **React.js**: Front-end user interface development.
+- **redux-toolkit**: for managing the states of the application.
 - **Solidity**: Smart contract development language for the Tron blockchain.
 - **Tailwind CSS**: Styling framework for the user interface.
+- **Sheryjs**: for animations and mousefollower
+- **js-cookies**: to store temporary javascript cookies.
 - **tronWeb.js**: Library for interacting with smart contracts on the Tron network.
 - **TronBox**: Tool used for deploying contracts on the blockchain.
 - **TronLink Wallet**: Tron-compatible wallet for transactions and interactions.
