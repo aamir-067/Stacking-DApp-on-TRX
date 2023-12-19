@@ -45,7 +45,7 @@ function Stack() {
                         Withdraw/Deposit TRX
                     </h2>
                     <p className="mt-2 text-center text-sm text-gray-200 ">
-                        Stack and earn 5% daily RWD Tokens
+                        Stack and earn TKN Tokens in every 5 mins
                     </p>
 
                     <div className='flex flex-col lg:flex-row justify-center gap-x-4 items-center mt-4'>

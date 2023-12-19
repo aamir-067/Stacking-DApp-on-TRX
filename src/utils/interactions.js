@@ -84,8 +84,8 @@ export const getDetails = async () => {
       }))
       return true;
     } catch (e) {
-      // console.log("error in sending transaction : ", e)
-      return "error while fetching details : ";
+      console.log("error in sending transaction : ", e)
+      return "error while fetching details ";
     }
   } else {
     // console.log("connect wallet first");

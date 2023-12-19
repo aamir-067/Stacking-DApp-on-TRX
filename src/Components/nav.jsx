@@ -4,18 +4,22 @@ import { store } from "../app/store";
 import { initWeb3, resetPeerDetails } from "../features";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { autoConnect, getDetails } from "../utils";
 import Cookies from "js-cookie";
 import { Cross as Hamburger } from "hamburger-react";
-import Shery from "sheryjs";
+import {makeMagnet} from "sheryjs";
 
 export default function NavBar() {
 	const address = useSelector((state) => state.web3Api)?.provider?.defaultAddress.base58;
 	const [toastMsg, setToastMsg] = useState(null);
 	const [isOpen, setIsOpen] = useState(false);
+	const menuCircle = useRef(null);
 
-	Shery.makeMagnet(".magnet");
+	makeMagnet(".magnet",{
+		duration : 2,
+		debug : true,
+	});
 
 	const handleLogIn = async () => {
 		if (address) {
@@ -45,6 +49,13 @@ export default function NavBar() {
 		// for automatically connecting a wallet if its not locked
 		autoConnect();
 	}, []);
+
+	// event to close the nav when  click outside.
+	document.addEventListener("click", (e) => {
+		if(e.target === menuCircle.current){
+			console.log('trigerred');
+		}
+	})
 
 	return (
 		<>
@@ -118,6 +129,7 @@ export default function NavBar() {
 				className={`bg-white overflow-x-hidden lg:hidden w-96 h-96 pt-30 pr-40 absolute -top-28 -right-40 rounded-full z-10 duration-200 ease-in ${
 					isOpen ? "opacity-100 scale-100" : "opacity-0 scale-0 translate-x-10 -translate-y-10"
 				}`}
+				ref={menuCircle}
 			>
 				<div className="w-full h-full pl-10 flex items-center">
 					<div className="flex flex-col items-start justify-around h-40 p-5">
@@ -129,7 +141,7 @@ export default function NavBar() {
 							className={({ isActive }) =>
 								`${
 									isActive ? "text-blue-700" : "text-black"
-								} font-bold text-lg`
+								} font-bold text-lg magnet`
 							}
 						>
 							Home
@@ -142,7 +154,7 @@ export default function NavBar() {
 							className={({ isActive }) =>
 								`${
 									isActive ? "text-blue-700" : "text-black"
-								} font-bold text-lg`
+								} font-bold text-lg magnet`
 							}
 						>
 							Operations
@@ -155,7 +167,7 @@ export default function NavBar() {
 							className={({ isActive }) =>
 								`${
 									isActive ? "text-blue-700" : "text-black"
-								} font-bold text-lg`
+								} font-bold text-lg magnet`
 							}
 						>
 							Dashboard
